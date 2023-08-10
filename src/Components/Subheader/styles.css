@@ -1,0 +1,20 @@
+.subheader{
+top: 91px;
+left: 323px;
+width: 1573px;
+height: 40px;
+background: #FDFDFD 0% 0% no-repeat padding-box;
+box-shadow: 0px 3px 6px #9D9D9D29;
+border-radius: 10px;
+opacity: 1;
+display: flex;
+align-items: center;
+text-align: left;
+font: normal normal bold 24px/32px Nunito Sans;
+letter-spacing: 0px;
+color: #000000;
+padding:50px;
+margin-top: 13px;
+margin-left: 12px;
+margin-right: 12px;
+}

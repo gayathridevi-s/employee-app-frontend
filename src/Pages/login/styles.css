@@ -14,9 +14,7 @@
     align-items: center;
     justify-content: center; 
   }
-  .inputBox{
   
-  }
   .leftBox>img {
     width: 30vw;
     height: 30vw;
@@ -37,5 +35,6 @@
 }
 .error{
     color:red;
-    margin-left:250px;
+    margin-left:180px;
+    margin-top: 10px;
 }

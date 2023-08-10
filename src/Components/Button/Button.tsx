@@ -1,5 +1,5 @@
 import { FC } from 'react';
-
+import './styles.css';
 type ButtonPropsTypes = {
   onClick: (e) => void;
   label: string;
@@ -7,7 +7,11 @@ type ButtonPropsTypes = {
 const Button: FC<ButtonPropsTypes> = (props) => {
   const { label, onClick } = props;
 
-  return <button onClick={onClick}>{label}</button>;
+  return (
+    <button className='Button' onClick={onClick}>
+      {label}
+    </button>
+  );
 };
 
 export default Button;

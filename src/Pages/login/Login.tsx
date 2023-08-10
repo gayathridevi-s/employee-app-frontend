@@ -13,7 +13,7 @@ const Login: FC = () => {
 
   const validateInput = () => {
     if (username && password) navigate('/employee');
-    else setError('empty username or password');
+    else setError('Invalid username or password');
   };
 
   return (
