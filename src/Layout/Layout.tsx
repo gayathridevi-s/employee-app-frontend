@@ -1,10 +1,12 @@
 import SideBar from '../Components/SideBar/SideBar';
 import Header from '../Components/Header/Header';
-import { FC } from 'react';
+import { FC, ReactElement } from 'react';
 import Subheader from '../Components/Subheader/Subheader';
 import './styles.css';
+
 type Layoutpropstype = {
   label: string;
+  content: ReactElement;
 };
 const Layout: FC<Layoutpropstype> = (props) => {
   return (
@@ -12,9 +14,10 @@ const Layout: FC<Layoutpropstype> = (props) => {
       <Header />
       <div style={{ display: 'flex' }}>
         <SideBar />
-        <body className='contentSection'>
+        <main className='contentSection'>
           <Subheader label={props.label} />
-        </body>
+          {props.content}
+        </main>
       </div>
     </div>
   );

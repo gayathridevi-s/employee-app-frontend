@@ -1,0 +1,21 @@
+.status {
+    width: 100px;
+    height: 30px;
+    border-radius: 50px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Active {
+    background: #D3F4BE 0% 0% no-repeat padding-box;
+}
+
+.Inactive {
+    background: #FFBFBF 0% 0% no-repeat padding-box;
+}
+
+.Probation {
+    background: #F5ECB8 0% 0% no-repeat padding-box;
+
+}
