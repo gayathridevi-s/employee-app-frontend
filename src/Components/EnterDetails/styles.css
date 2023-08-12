@@ -1,0 +1,45 @@
+.detailBox{
+
+display:flex;
+flex-wrap: wrap;
+padding:10px;
+gap:15px;
+}
+input {
+    height: 45px;
+    width:400px;
+    padding-left: 10px;
+    border-radius: 5px;
+    border: 2px solid #b4b7bd;
+    background-color: transparent;
+  }
+  input:focus-visible {
+      border: 2px solid #1eb4f0;
+      outline: 2px;
+  }
+  
+  input:focus,
+  input:active {
+    border: 2px solid #1eb4f0;
+    outline: 2px;
+  }
+  .addressWrap{
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+  }
+  .outerBox{
+    width: 1577px;
+height: 591px;
+background: #FDFDFD 0% 0% no-repeat padding-box;
+box-shadow: 0px 3px 6px #9D9D9D29;
+border-radius: 10px;
+margin-top: 30px;
+margin-right: 20px;
+  }
+  .buttons{
+    display:flex;
+    gap:10px;
+    padding:10px
+  }
+  

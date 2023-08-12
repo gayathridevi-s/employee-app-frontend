@@ -1,13 +1,14 @@
-// import { FC } from 'react';
+import { FC } from 'react';
 
-// import Layout from '../../Layout/Layout';
+import Layout from '../../Layout/Layout';
+import EnterDetails from '../../Components/EnterDetails/EnterDetails';
 
-// const CreateEmployee: FC = () => {
-//   return (
-//     <>
-//       <Layout label='EmployeeDetails' content={<Details />} />
-//     </>
-//   );
-// };
+const CreateEmployee: FC = () => {
+  return (
+    <>
+      <Layout label='Create Employee' actionBoxLabel='' imageUrl='' content={<EnterDetails />} />
+    </>
+  );
+};
 
-// export default CreateEmployee;
+export default CreateEmployee;

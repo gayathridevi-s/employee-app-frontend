@@ -5,7 +5,12 @@ import Layout from '../../Layout/Layout';
 const EmployeeDetails: FC = () => {
   return (
     <>
-      <Layout label='EmployeeDetails' content={<Details />} />
+      <Layout
+        label='Employee Details'
+        actionBoxLabel='Edit'
+        imageUrl='/assets/icons/edit.svg'
+        content={<Details />}
+      />
     </>
   );
 };

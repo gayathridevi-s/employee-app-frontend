@@ -4,7 +4,12 @@ import Table from '../../Components/Table/table';
 const Employee: FC = () => {
   return (
     <>
-      <Layout label='EmployeeDetails' content={<Table/>} />
+      <Layout
+        label='Employee List'
+        actionBoxLabel='Create employee'
+        imageUrl='/assets/icons/+.svg'
+        content={<Table />}
+      />
     </>
   );
 };

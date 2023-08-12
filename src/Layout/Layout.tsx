@@ -7,6 +7,8 @@ import './styles.css';
 type Layoutpropstype = {
   label: string;
   content: ReactElement;
+  actionBoxLabel: string;
+  imageUrl: string;
 };
 const Layout: FC<Layoutpropstype> = (props) => {
   return (
@@ -15,7 +17,11 @@ const Layout: FC<Layoutpropstype> = (props) => {
       <div style={{ display: 'flex' }}>
         <SideBar />
         <main className='contentSection'>
-          <Subheader label={props.label} />
+          <Subheader
+            label={props.label}
+            labelActionbox={props.actionBoxLabel}
+            imageUrl={props.imageUrl}
+          />
           {props.content}
         </main>
       </div>
