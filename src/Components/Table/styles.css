@@ -42,3 +42,13 @@ tr {
     cursor: pointer;
     background-color: rgb(208, 207, 207);
 }
+.bin{
+    height:20px;
+    width: 20px;
+    margin-right: 20px;
+}
+.editIcon{
+    height:20px;
+    width: 20px;
+    background-color: aqua; 
+}

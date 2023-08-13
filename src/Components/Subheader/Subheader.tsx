@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import './styles.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type subheaderpropstype = {
   label: string;
@@ -9,9 +9,10 @@ type subheaderpropstype = {
 };
 const Subheader: FC<subheaderpropstype> = (props) => {
   console.log(props);
+  const { id } = useParams();
   const navigate = useNavigate();
   const handleActionBoxClick = () => {
-    if (props.labelActionbox === 'Edit') navigate('/create'); // Navigate to the edit page
+    if (props.labelActionbox === 'Edit') navigate(`/employee/${id}/edit`); // Navigate to the edit page
     else if (props.labelActionbox === 'Create employee') navigate('/create'); // Navigate to the create employee page
   };
 

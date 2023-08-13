@@ -3,6 +3,7 @@ import './styles.css';
 import Input from '../Input/Input';
 import Dropdown from '../Dropdown/Dropdown';
 import SmallButton from '../SmallButton/SmallButton';
+import { useNavigate, useParams } from 'react-router-dom';
 const EnterDetails: FC = () => {
   const [name, setName] = useState(null);
   const [date, setDate] = useState(null);
@@ -13,6 +14,8 @@ const EnterDetails: FC = () => {
   const [department, setDepartment] = useState('');
   const [status, setStatus] = useState('');
   const [role, setRole] = useState('');
+  const { id } = useParams();
+  const navigate = useNavigate();
   const roleOptions = [
     { value: 'user', label: 'User' },
     { value: 'admin', label: 'Admin' }
@@ -30,6 +33,14 @@ const EnterDetails: FC = () => {
     { value: 'development', label: 'Development' },
     { value: 'hr', label: 'Human Resources' }
   ];
+  const handleSubmit = () => {
+    if (id) console.log('Edited the changes');
+    else console.log('Created new Employee');
+  };
+  const handleCancel = () => {
+    if (id) navigate(`/employee/${id}`);
+    else navigate('/employee');
+  };
 
   return (
     <div className='outerBox'>
@@ -103,11 +114,17 @@ const EnterDetails: FC = () => {
             }}
           />
         </div>
+        {id && (
+          <div className='inputRow'>
+            <label>Employee ID</label>
+            <input className='id' type='text' value={id} readOnly />
+          </div>
+        )}
       </div>
 
       <div className='buttons'>
-        <SmallButton label='Create' color='blue' onClick={() => {}} />
-        <SmallButton label='Cancel' color='white' onClick={() => {}} />
+        <SmallButton label={id ? 'Save' : 'Create'} color='blue' onClick={handleSubmit} />
+        <SmallButton label='Cancel' color='white' onClick={handleCancel} />
       </div>
     </div>
   );

@@ -42,7 +42,10 @@ const Table = () => {
               </div>
             </td>
             <td>{obj.experience}</td>
-            <td>{obj.Action}</td>
+            <td>
+              <img src='/assets/icons/699013.png' className='bin' />
+              <img src='/assets/icons/editt.png' className='editIcon' />
+            </td>
           </tr>
         ))}
       </tbody>

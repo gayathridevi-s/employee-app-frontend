@@ -42,4 +42,11 @@ margin-right: 20px;
     gap:10px;
     padding:10px
   }
-  
+  .inputRow{
+    display:flex;
+    flex-direction: column;
+    
+  }
+  .id{
+    background-color: #D1D1D1;
+  }
