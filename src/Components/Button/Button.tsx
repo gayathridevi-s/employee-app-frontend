@@ -1,14 +1,14 @@
 import { FC } from 'react';
 import './styles.css';
-type ButtonPropsTypes = {
-  onClick: (e) => void;
+export type ButtonPropsTypes = {
+  onClick?: (e) => void;
   label: string;
 };
 const Button: FC<ButtonPropsTypes> = (props) => {
   const { label, onClick } = props;
 
   return (
-    <button className='Button' onClick={onClick}>
+    <button className='Button' onClick={onClick} data-testid='button-test'>
       {label}
     </button>
   );

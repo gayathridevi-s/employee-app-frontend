@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import './Styles.css';
-type SmallButtonPropsTypes = {
+export type SmallButtonPropsTypes = {
   color: 'blue' | 'white';
-  onClick: (e) => void;
+  onClick?: (e) => void;
   label: string;
 };
 const SmallButton: FC<SmallButtonPropsTypes> = (props) => {
@@ -10,7 +10,7 @@ const SmallButton: FC<SmallButtonPropsTypes> = (props) => {
   const buttonClassName = `button ${color === 'blue' ? 'blue-button' : 'white-button'}`;
 
   return (
-    <button className={buttonClassName} onClick={onClick}>
+    <button className={buttonClassName} onClick={onClick} data-testid='smallbutton-test'>
       {label}
     </button>
   );
