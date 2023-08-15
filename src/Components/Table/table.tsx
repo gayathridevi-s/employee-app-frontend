@@ -1,20 +1,36 @@
 import './styles.css';
 import Status from '../Status/Status';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { mockEmployeesData as data } from '../../constants/mockData';
 
 const Table = () => {
   const title = [
     'EmployeeName',
     'EmployeeId',
-    'JoiningId',
+    'JoiningDate',
     'Role',
     'status',
     'experience',
     'Action'
   ];
+  const employeesData = useSelector((state: any) => {
+    return state.employees;
+  });
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const handleDelete = (id, e) => {
+    e.stopPropagation();
+    dispatch({
+      type: 'EMPLOYEE:DELETE',
+      payload: id
+    });
+  };
+  const handleEdit = (id, eve) => {
+    eve.stopPropagation();
+    // const employee = employeesData.find((emp) => emp.EmployeeId === Number(id));
+    navigate(`/employee/${id}/edit`);
+  };
 
   return (
     <table>
@@ -26,7 +42,7 @@ const Table = () => {
         </tr>
       </thead>
       <tbody>
-        {data.map((obj) => (
+        {employeesData.map((obj) => (
           <tr
             className='data-row'
             key={obj.EmployeeId}
@@ -34,7 +50,7 @@ const Table = () => {
           >
             <td>{obj.EmployeeName}</td>
             <td>{obj.EmployeeId}</td>
-            <td>{obj.JoiningId}</td>
+            <td>{obj.JoiningDate}</td>
             <td>{obj.Role}</td>
             <td>
               <div className='status-wrap'>
@@ -43,8 +59,16 @@ const Table = () => {
             </td>
             <td>{obj.experience}</td>
             <td>
-              <img src='/assets/icons/699013.png' className='bin' />
-              <img src='/assets/icons/editt.png' className='editIcon' />
+              <img
+                src='/assets/icons/699013.png'
+                className='bin'
+                onClick={(e) => handleDelete(obj.EmployeeId, e)}
+              />
+              <img
+                src='/assets/icons/editt.png'
+                className='editIcon'
+                onClick={(eve) => handleEdit(obj.EmployeeId, eve)}
+              />
             </td>
           </tr>
         ))}

@@ -1,14 +1,15 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import './styles.css';
 import Input from '../Input/Input';
 import Dropdown from '../Dropdown/Dropdown';
 import SmallButton from '../SmallButton/SmallButton';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 const EnterDetails: FC = () => {
-  const [name, setName] = useState(null);
-  const [date, setDate] = useState(null);
-  const [experience, setExperience] = useState(null);
-  const [address, setAddress] = useState(null);
+  const [name, setName] = useState('');
+  const [date, setDate] = useState('');
+  const [experience, setExperience] = useState('');
+  const [city, setCity] = useState('');
   const [addressline1, setAddressLine1] = useState('');
   const [addressline2, setAddressLine2] = useState('');
   const [department, setDepartment] = useState('');
@@ -16,6 +17,27 @@ const EnterDetails: FC = () => {
   const [role, setRole] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
+  const employeesData = useSelector((state: any) => {
+    return state.employees;
+  });
+
+  useEffect(() => {
+    const employee = employeesData.find((emp) => emp.EmployeeId === Number(id));
+
+    if (employee) {
+      setName(employee.EmployeeName);
+      setDate(employee.JoiningDate);
+      setExperience(employee.experience);
+      setCity(employee.address.city);
+      setAddressLine1(employee.address.addressLine1);
+      setAddressLine2(employee.address.addressLine2);
+      setDepartment(employee.departmentId);
+      setStatus(employee.status);
+      setRole(employee.Role);
+    }
+  }, [id]);
+
+  const dispatch = useDispatch();
   const roleOptions = [
     { value: 'user', label: 'User' },
     { value: 'admin', label: 'Admin' }
@@ -23,8 +45,9 @@ const EnterDetails: FC = () => {
   ];
 
   const statusOptions = [
-    { value: 'active', label: 'Active' },
-    { value: 'inactive', label: 'Inactive' }
+    { value: 'ACTIVE', label: 'Active' },
+    { value: 'INACTIVE', label: 'Inactive' },
+    { value: 'PROBATION', label: 'Probation' }
     // Add more status options if needed
   ];
 
@@ -34,8 +57,61 @@ const EnterDetails: FC = () => {
     { value: 'hr', label: 'Human Resources' }
   ];
   const handleSubmit = () => {
-    if (id) console.log('Edited the changes');
-    else console.log('Created new Employee');
+    if (id) {
+      const employeeToUpdate = employeesData.find((emp) => emp.EmployeeId === Number(id));
+
+      if (employeeToUpdate) {
+        const updatedEmployee = {
+          EmployeeName: name,
+          EmployeeId: employeeToUpdate.EmployeeId, // Use the EmployeeId of the employee to update
+          Role: role,
+          status: status,
+          experience: experience,
+          JoiningDate: date,
+          departmentId: department,
+          address: {
+            addressLine1: addressline1,
+            addressLine2: addressline2,
+            city: city
+          }
+        };
+
+        console.log('Updated Employee:', updatedEmployee); // Add this log
+        dispatch({
+          type: 'EMPLOYEE:EDIT',
+          payload: {
+            employee: updatedEmployee
+          }
+        });
+      }
+    } else {
+      dispatch({
+        type: 'EMPLOYEE:CREATE',
+        payload: {
+          employee: {
+            EmployeeName: name,
+            EmployeeId: 100,
+            // JoiningId: 8,
+            Role: role,
+            status: status,
+            experience: experience,
+            // Action: 'none',
+            JoiningDate: date,
+            // departmentId: 2,
+            address: {
+              id: '5ab12a9c-c870-4593-85d3-238cbd8e2749',
+              addressLine1: addressline1,
+              addressLine2: addressline2,
+              city: city,
+              state: 'Kerala',
+              country: 'India',
+              pincode: '682024'
+            }
+          }
+        }
+      });
+    }
+    navigate('/employee');
   };
   const handleCancel = () => {
     if (id) navigate(`/employee/${id}`);
@@ -90,12 +166,14 @@ const EnterDetails: FC = () => {
         />
 
         <div className='addressWrap'>
-          <Input
-            label='Address'
+          <div>Address</div>
+          <input
             type='text'
-            placeholder='Flat No./House No.'
-            value={address}
-            onChange={setAddress}
+            placeholder='City'
+            value={city}
+            onChange={(e) => {
+              setCity(e.target.value);
+            }}
           />
           <input
             type='text'

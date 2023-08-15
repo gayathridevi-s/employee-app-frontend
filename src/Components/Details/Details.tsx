@@ -1,10 +1,14 @@
 import React, { FC } from 'react';
-import { mockEmployeesData } from '../../constants/mockData';
+
 import { useParams } from 'react-router-dom';
 import './styles.css';
+import { useSelector } from 'react-redux';
 const Details: FC = () => {
   const { id } = useParams();
-  const employee = mockEmployeesData.find((emp) => emp.EmployeeId === Number(id));
+  const employeesData = useSelector((state: any) => {
+    return state.employees;
+  });
+  const employee = employeesData.find((emp) => emp.EmployeeId === Number(id));
 
   return (
     <div className='details'>
@@ -15,7 +19,7 @@ const Details: FC = () => {
         </div>
         <div>
           <div className='label'>Joining Date</div>
-          <div className='detailItem'>{employee.JoiningId}</div>
+          <div className='detailItem'>{employee.JoiningDate}</div>
         </div>
         <div>
           <div className='label'>Experience</div>
@@ -35,7 +39,7 @@ const Details: FC = () => {
           <div className='label'>Address</div>
           <div className='detailItem'>
             {employee.address.addressLine1}, {employee.address.addressLine2},{employee.address.city}
-            , {employee.address.state},{employee.address.country}, {employee.address.pincode}
+            {/* , {employee.address.state},{employee.address.country}, {employee.address.pincode} */}
           </div>
         </div>
         <div>
