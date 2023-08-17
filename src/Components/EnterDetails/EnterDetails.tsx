@@ -4,118 +4,204 @@ import Input from '../Input/Input';
 import Dropdown from '../Dropdown/Dropdown';
 import SmallButton from '../SmallButton/SmallButton';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-const EnterDetails: FC = () => {
+import { useCreateEmployeeMutation } from '../../Pages/Create/api';
+import { useGetdepartmentQuery } from '../../services/departmentapi';
+import { useGetroleQuery } from '../../services/roleapi';
+import { useLazyGetEmployeeQuery } from '../../Pages/EmployeeDetails/api';
+import { useEditEmployeeMutation } from '../../services/editapi';
+export enum StatusEnum {
+  PROBATION = 'Probation',
+  ACTIVE = 'Active',
+  INACTIVE = 'Inactive'
+}
+const EnterDetails: FC<{ edit: boolean }> = ({ edit }) => {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
-  const [experience, setExperience] = useState('');
+  const [experience, setExperience] = useState(0);
   const [city, setCity] = useState('');
   const [addressline1, setAddressLine1] = useState('');
   const [addressline2, setAddressLine2] = useState('');
-  const [department, setDepartment] = useState('');
+  const [department, setDepartment] = useState<number>();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  // const [departmentId, setDepartmentId] = useState(-1);
   const [status, setStatus] = useState('');
   const [role, setRole] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
-  const employeesData = useSelector((state: any) => {
-    return state.employees;
-  });
+  // const employeesData = useSelector((state: any) => {
+  //   return state.employees;
+  // });
+  const [getEmployeeById, { data: employeeData }] = useLazyGetEmployeeQuery();
+  const [createEmployee, { isSuccess }] = useCreateEmployeeMutation();
+  const [editEmployee, { isSuccess: isSuccessEdit }] = useEditEmployeeMutation();
 
   useEffect(() => {
-    const employee = employeesData.find((emp) => emp.EmployeeId === Number(id));
-
-    if (employee) {
-      setName(employee.EmployeeName);
-      setDate(employee.JoiningDate);
-      setExperience(employee.experience);
-      setCity(employee.address.city);
-      setAddressLine1(employee.address.addressLine1);
-      setAddressLine2(employee.address.addressLine2);
-      setDepartment(employee.departmentId);
-      setStatus(employee.status);
-      setRole(employee.Role);
+    if (employeeData) {
+      setName(employeeData.data.name);
+      setDate(employeeData.data.joiningDate);
+      setExperience(employeeData.data.experience);
+      setCity(employeeData.data.address.city);
+      setUsername(employeeData.data.username);
+      setAddressLine1(employeeData.data.address.addressLine1);
+      setAddressLine2(employeeData.data.address.addressLine2);
+      setDepartment(employeeData.data.departmentId);
+      setStatus(employeeData.data.status);
+      setRole(employeeData.data.role);
     }
-  }, [id]);
+  }, [employeeData]);
 
-  const dispatch = useDispatch();
-  const roleOptions = [
-    { value: 'user', label: 'User' },
-    { value: 'admin', label: 'Admin' }
-    // Add more role options if needed
-  ];
+  useEffect(() => {
+    console.log('Consoling', id);
+    if (id) getEmployeeById(id);
+  }, [id]);
+  const { data } = useGetdepartmentQuery();
+
+  const { data: roleData } = useGetroleQuery();
+  const roleOptions = roleData?.data?.map((role) => ({
+    value: role,
+    label: role
+  }));
 
   const statusOptions = [
-    { value: 'ACTIVE', label: 'Active' },
-    { value: 'INACTIVE', label: 'Inactive' },
-    { value: 'PROBATION', label: 'Probation' }
-    // Add more status options if needed
+    { value: StatusEnum.ACTIVE, label: 'Active' },
+    { value: StatusEnum.INACTIVE, label: 'Inactive' },
+    { value: StatusEnum.PROBATION, label: 'Probation' }
   ];
 
-  const departmentOptions = [
-    { value: 'ui', label: 'UI' },
-    { value: 'development', label: 'Development' },
-    { value: 'hr', label: 'Human Resources' }
-  ];
+  const departmentOptions = data?.data.map((department) => ({
+    value: department.id,
+    label: department.name
+  }));
+
   const handleSubmit = () => {
-    if (id) {
-      const employeeToUpdate = employeesData.find((emp) => emp.EmployeeId === Number(id));
+    // eslint-disable-next-line no-debugger
 
-      if (employeeToUpdate) {
-        const updatedEmployee = {
-          EmployeeName: name,
-          EmployeeId: employeeToUpdate.EmployeeId, // Use the EmployeeId of the employee to update
-          Role: role,
-          status: status,
-          experience: experience,
-          JoiningDate: date,
-          departmentId: department,
-          address: {
-            addressLine1: addressline1,
-            addressLine2: addressline2,
-            city: city
-          }
-        };
+    if (edit) {
+      if (
+        name &&
+        role &&
+        status &&
+        experience &&
+        date &&
+        department &&
+        city &&
+        addressline1 &&
+        addressline2 &&
+        username
+      )
+        editEmployee({
+          body: {
+            name,
+            role,
+            status,
+            experience: Number(experience),
+            joiningDate: date,
+            departmentId: department,
+            username,
+            password,
 
-        console.log('Updated Employee:', updatedEmployee); // Add this log
-        dispatch({
-          type: 'EMPLOYEE:EDIT',
-          payload: {
-            employee: updatedEmployee
-          }
-        });
-      }
-    } else {
-      dispatch({
-        type: 'EMPLOYEE:CREATE',
-        payload: {
-          employee: {
-            EmployeeName: name,
-            EmployeeId: 100,
-            // JoiningId: 8,
-            Role: role,
-            status: status,
-            experience: experience,
-            // Action: 'none',
-            JoiningDate: date,
-            // departmentId: 2,
             address: {
-              id: '5ab12a9c-c870-4593-85d3-238cbd8e2749',
               addressLine1: addressline1,
               addressLine2: addressline2,
-              city: city,
+              city,
               state: 'Kerala',
               country: 'India',
-              pincode: '682024'
+              pincode: '694124'
             }
-          }
+          },
+          id
+        });
+    }
+
+    // const employeeToUpdate = employeesData.find((emp) => emp.EmployeeId === Number(id));
+    // if (employeeToUpdate) {
+    //   const updatedEmployee = {
+    //     EmployeeName: name,
+    //     EmployeeId: employeeToUpdate.EmployeeId, // Use the EmployeeId of the employee to update
+    //     Role: role,
+    //     status: status,
+    //     experience: experience,
+    //     JoiningDate: date,
+    //     department: String(department),
+    //     address: {
+    //       addressLine1: addressline1,
+    //       addressLine2: addressline2,
+    //       city: city
+    //     }
+    //   };
+    //   console.log('Updated Employee:', updatedEmployee); // Add this log
+    //   dispatch(
+    //     editEmployee({
+    //       employee: updatedEmployee
+    //     })
+    //   );
+    // }
+    else if (
+      name &&
+      role &&
+      status &&
+      experience &&
+      date &&
+      department &&
+      city &&
+      addressline1 &&
+      addressline2 &&
+      username &&
+      password
+    ) {
+      // eslint-disable-next-line no-debugger
+
+      createEmployee({
+        name,
+        role,
+        status,
+        experience: Number(experience),
+        joiningDate: date,
+        departmentId: department,
+        username,
+        password,
+
+        address: {
+          addressLine1: addressline1,
+          addressLine2: addressline2,
+          city,
+          state: 'Kerala',
+          country: 'India',
+          pincode: '694124'
         }
       });
     }
-    navigate('/employee');
+
+    // dispatch(
+    //   addEmployee({
+    //     employee: {
+    //       EmployeeName: name,
+    //       Role: role,
+    //       status,
+    //       experience,
+    //       JoiningDate: date,
+    //       department,
+    //       address: {
+    //         addressLine1: addressline1,
+    //         addressLine2: addressline2,
+    //         city
+    //       }
+    //     }
+    //   })
+    // );
   };
+
+  useEffect(() => {
+    if (isSuccess) navigate('/employees');
+  }, [isSuccess]);
+  useEffect(() => {
+    if (isSuccessEdit) navigate('/employees');
+  }, [isSuccessEdit]);
+
   const handleCancel = () => {
-    if (id) navigate(`/employee/${id}`);
-    else navigate('/employee');
+    if (edit) navigate(`/employee/${id}`);
+    else navigate('/employees');
   };
 
   return (
@@ -142,19 +228,38 @@ const EnterDetails: FC = () => {
           value={experience}
           onChange={setExperience}
         />
-        <Dropdown
-          label='Department'
-          value={department}
-          onChange={(value: string) => setDepartment(value)}
-          placeholder='Choose Department'
-          options={departmentOptions}
+        <Input
+          label='Username'
+          type='text'
+          placeholder='Username'
+          value={username}
+          onChange={setUsername}
         />
+        <Input
+          label='Password'
+          type='text'
+          placeholder='Password'
+          value={password}
+          onChange={setPassword}
+        />
+
+        {departmentOptions && (
+          <Dropdown
+            label='Department'
+            value={department}
+            onChange={(value: string) => {
+              setDepartment(Number(value));
+            }}
+            placeholder='Choose Department'
+            options={departmentOptions}
+          />
+        )}
         <Dropdown
           label='Role'
           value={role}
           onChange={(value: string) => setRole(value)}
           placeholder='Choose Role'
-          options={roleOptions}
+          options={roleOptions || []}
         />
 
         <Dropdown
@@ -192,7 +297,8 @@ const EnterDetails: FC = () => {
             }}
           />
         </div>
-        {id && (
+
+        {edit && (
           <div className='inputRow'>
             <label>Employee ID</label>
             <input className='id' type='text' value={id} readOnly />
@@ -201,7 +307,7 @@ const EnterDetails: FC = () => {
       </div>
 
       <div className='buttons'>
-        <SmallButton label={id ? 'Save' : 'Create'} color='blue' onClick={handleSubmit} />
+        <SmallButton label={edit ? 'Save' : 'Create'} color='blue' onClick={handleSubmit} />
         <SmallButton label='Cancel' color='white' onClick={handleCancel} />
       </div>
     </div>

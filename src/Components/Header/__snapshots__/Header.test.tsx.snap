@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header Component matches snapshot 1`] = `
+<DocumentFragment>
+  <header
+    class="header"
+  >
+    <img
+      alt="kv-image"
+      src="/assets/img/kv-logo.png"
+      width="200"
+    />
+  </header>
+</DocumentFragment>
+`;

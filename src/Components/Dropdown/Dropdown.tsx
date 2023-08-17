@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import './Styles.css';
 type DropdownProps = {
-  value: string;
+  value: string | number;
   onChange: (value: string) => void;
   label: string;
   placeholder: string;
@@ -9,12 +9,14 @@ type DropdownProps = {
 };
 
 const Dropdown: FC<DropdownProps> = (props) => {
+  console.log('***', props.value);
+
   return (
     <div className='dropdownWrap'>
       <label>{props.label}</label>
       <select
         className='input'
-        value={props.value}
+        value={props.value || ''}
         onChange={(e) => props.onChange(e.target.value)} // Pass the selected value
       >
         <option value='' disabled>

@@ -1,3 +1,6 @@
+import { addEmployee, deleteEmployee, editEmployee } from '../actions/employeeAction';
+import { createReducer } from '@reduxjs/toolkit';
+
 const initialState = [
   {
     EmployeeName: 'Gayathri',
@@ -40,35 +43,62 @@ const initialState = [
     }
   }
 ];
-const employeeReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'EMPLOYEE:CREATE': {
-      const newState = [...state, action.payload.employee];
 
-      return newState;
-    }
-    case 'EMPLOYEE:DELETE': {
-      const employeeIdtoDelete = action.payload;
-      const newState = state.filter((employee) => employee.EmployeeId != employeeIdtoDelete);
+const employeeReducer = createReducer(initialState, (builder) => {
+  builder.addCase(addEmployee, (state, action) => {
+    state = [...state, action.payload];
 
-      return newState;
-    }
-    case 'EMPLOYEE:EDIT': {
-      const updatedEmployee = action.payload.employee;
+    return state;
+  });
+  builder.addCase(editEmployee, (state, action) => {
+    const updatedEmployee = action.payload.employee;
 
-      console.log(updatedEmployee);
-      const newState = state.map((employee) =>
-        employee.EmployeeId === updatedEmployee.EmployeeId ? updatedEmployee : employee
-      );
+    console.log(updatedEmployee);
+    console.log(state);
+    state = state.map((employee) => {
+      console.log(employee);
 
-      console.log('newEMPLOYEE', newState);
+      return employee.EmployeeId === updatedEmployee.EmployeeId ? updatedEmployee : employee;
+    });
 
-      return newState;
-    }
+    return state;
+  });
+  builder.addCase(deleteEmployee, (state, action) => {
+    const employeeIdtoDelete = action.payload;
+    const newState = state.filter((employee) => employee.EmployeeId != employeeIdtoDelete);
 
-    default:
-      return state;
-  }
-};
+    return newState;
+  });
+});
+// const employeeReducer = (state = initialState, action) => {
+//   switch (action.type) {
+//     case 'EMPLOYEE:CREATE': {
+//       const newState = [...state, action.payload.employee];
+
+//       return newState;
+//     }
+// case 'EMPLOYEE:DELETE': {
+//   const employeeIdtoDelete = action.payload;
+//   const newState = state.filter((employee) => employee.EmployeeId != employeeIdtoDelete);
+
+//   return newState;
+// }
+// case 'EMPLOYEE:EDIT': {
+// const updatedEmployee = action.payload.employee;
+
+// console.log(updatedEmployee);
+// const newState = state.map((employee) =>
+//   employee.EmployeeId === updatedEmployee.EmployeeId ? updatedEmployee : employee
+// );
+
+// console.log('newEMPLOYEE', newState);
+
+// return newState;
+// }
+
+// default:
+//   return state;
+//   }
+// };
 
 export default employeeReducer;

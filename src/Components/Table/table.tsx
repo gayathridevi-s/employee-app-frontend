@@ -1,7 +1,9 @@
 import './styles.css';
 import Status from '../Status/Status';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useGetEmployeeListQuery } from '../../Pages/Employee/api';
+import { useDeleteEmployeeMutation } from '../../services/deleteapi';
+import { useEffect, useState } from 'react';
 
 const Table = () => {
   const title = [
@@ -13,63 +15,63 @@ const Table = () => {
     'experience',
     'Action'
   ];
-  const employeesData = useSelector((state: any) => {
-    return state.employees;
-  });
+  const role = localStorage.getItem('Role');
+  const [isRoleAdmin, setRoleAdmin] = useState(false);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleDelete = (id, e) => {
     e.stopPropagation();
-    dispatch({
-      type: 'EMPLOYEE:DELETE',
-      payload: id
-    });
+    deleteEmployeeById(id);
   };
   const handleEdit = (id, eve) => {
     eve.stopPropagation();
-    // const employee = employeesData.find((emp) => emp.EmployeeId === Number(id));
+
     navigate(`/employee/${id}/edit`);
   };
+
+  const { data } = useGetEmployeeListQuery();
+  const [deleteEmployeeById] = useDeleteEmployeeMutation();
+
+  useEffect(() => {
+    if (role == 'Admin') setRoleAdmin(true);
+  }, [role]);
 
   return (
     <table>
       <thead>
         <tr>
-          {title.map((item) => (
-            <th key={item}>{item}</th>
-          ))}
+          {title.map((item) =>
+            item === 'Action' && !isRoleAdmin ? null : <th key={item}>{item}</th>
+          )}
         </tr>
       </thead>
       <tbody>
-        {employeesData.map((obj) => (
-          <tr
-            className='data-row'
-            key={obj.EmployeeId}
-            onClick={() => navigate(`/employee/${obj.EmployeeId}`)}
-          >
-            <td>{obj.EmployeeName}</td>
-            <td>{obj.EmployeeId}</td>
-            <td>{obj.JoiningDate}</td>
-            <td>{obj.Role}</td>
+        {data?.data?.map((obj) => (
+          <tr className='data-row' key={obj.id} onClick={() => navigate(`/employees/${obj.id}`)}>
+            <td>{obj.name}</td>
+            <td>{obj.id}</td>
+            <td>{obj.joiningDate}</td>
+            <td>{obj.role}</td>
             <td>
               <div className='status-wrap'>
                 <Status status={obj.status} />
               </div>
             </td>
             <td>{obj.experience}</td>
-            <td>
-              <img
-                src='/assets/icons/699013.png'
-                className='bin'
-                onClick={(e) => handleDelete(obj.EmployeeId, e)}
-              />
-              <img
-                src='/assets/icons/editt.png'
-                className='editIcon'
-                onClick={(eve) => handleEdit(obj.EmployeeId, eve)}
-              />
-            </td>
+            {isRoleAdmin && (
+              <td>
+                <img
+                  src='/assets/icons/699013.png'
+                  className='bin'
+                  onClick={(e) => handleDelete(obj.id, e)}
+                />
+                <img
+                  src='/assets/icons/editt.png'
+                  className='editIcon'
+                  onClick={(eve) => handleEdit(obj.id, eve)}
+                />
+              </td>
+            )}
           </tr>
         ))}
       </tbody>

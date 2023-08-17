@@ -1,8 +1,9 @@
 import Input from '../../Components/Input/Input';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
 import Button from '../../Components/Button/Button';
+import { useLoginMutation } from './api';
 
 const Login: FC = () => {
   const [username, setUsername] = useState(null);
@@ -11,10 +12,27 @@ const Login: FC = () => {
 
   const navigate = useNavigate();
 
+  const [login, { data, isSuccess }] = useLoginMutation();
   const validateInput = () => {
-    if (username && password) navigate('/employee');
+    // eslint-disable-next-line no-debugger
+    debugger;
+    if (username && password) login({ username, password });
     else setError('Invalid username or password');
   };
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      // eslint-disable-next-line no-debugger
+
+      console.log(data);
+      localStorage.setItem('token', data.data.token);
+
+      localStorage.setItem('Role', data.data.employeeDetails.role);
+      console.log(data.data.employeeDetails.role);
+
+      navigate('/employees');
+    }
+  }, [data, isSuccess]);
 
   return (
     <section className='loginSection'>

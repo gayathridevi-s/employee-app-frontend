@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import './Styles.css';
 
-type InputPropsTypes = {
-  value: string;
+export type InputPropsTypes = {
+  value: string|number;
   onChange: (e) => void;
   label: string;
   placeholder: string;
-  type: 'text' | 'password'|'number';
+  type: 'text' | 'password' | 'number';
 };
 const Input: FC<InputPropsTypes> = (props) => {
   return (

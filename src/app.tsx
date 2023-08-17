@@ -11,10 +11,10 @@ const App: FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/login' element={<Login />} />
-        <Route path='/employee' element={<Employee />} />
-        <Route path='/employee/:id' element={<EmployeeDetails />} />
-        <Route path='/create' element={<Create />} />
-        <Route path='/employee/:id/edit' element={<Create />} />
+        <Route path='/employees' element={<Employee />} />
+        <Route path='/employees/:id' element={<EmployeeDetails />} />
+        <Route path='/create' element={<Create edit={false}/>} />
+        <Route path='/employee/:id/edit' element={<Create edit={true}/>} />
       </Routes>
     </BrowserRouter>
   );
