@@ -1,0 +1,24 @@
+/* label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #b4b7bd;
+    position: relative;
+    top: -50%;
+    left: 15px;
+    width: fit-content;
+    transition: 0.3s;
+    pointer-events: none;
+  }
+  */
+  .input {
+    height: 45px;
+    width:400px;
+    padding-left: 10px;
+    border-radius: 5px;
+    border: 2px solid #b4b7bd;
+    background-color: transparent;
+  }
+  .dropdownWrap{
+    display: flex;
+    flex-direction: column;
+  }

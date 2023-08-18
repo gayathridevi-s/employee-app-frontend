@@ -1,0 +1,36 @@
+.details{
+    width: 1275px;
+    background: #FDFDFD 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #9D9D9D29;
+    border-radius: 10px;
+    margin-top: 20px;
+    display:flex;
+    flex-direction: column;
+    gap: 30px;
+    padding:20px;
+}
+.topDetails{
+    display:flex;
+    justify-content: space-between;
+}
+.bottonDetails{
+display:flex;
+gap:170px;
+}
+.label{
+ width: 117px;
+height: 22px;
+text-align: left;
+font: normal normal 600 16px/22px Nunito;
+letter-spacing: 0px;
+color: #8B8D9D;
+}
+.detailItem{
+width: 62px;
+
+
+text-align: left;
+font: normal normal 600 16px/22px Nunito;
+letter-spacing: 0px;
+color: #434552;
+}
